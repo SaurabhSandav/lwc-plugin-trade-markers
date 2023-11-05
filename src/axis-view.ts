@@ -1,13 +1,22 @@
 import { Coordinate, ISeriesPrimitiveAxisView } from 'lightweight-charts';
-import { Point, TradeMarkersDataSource } from './data-source';
+import { Point, TradeMarkerDataSource } from './data-source';
+import { TradeMarkersLabelOptions } from './options';
 
 abstract class TradeMarkersAxisView implements ISeriesPrimitiveAxisView {
-	_source: TradeMarkersDataSource;
+
+	_source: TradeMarkerDataSource;
 	_p: Point;
+	_labelOptions: TradeMarkersLabelOptions;
 	_pos: Coordinate | null = null;
-	constructor(source: TradeMarkersDataSource, p: Point) {
+
+	constructor(
+		source: TradeMarkerDataSource,
+		p: Point,
+		labelOptions: TradeMarkersLabelOptions,
+	) {
 		this._source = source;
 		this._p = p;
+		this._labelOptions = labelOptions;
 	}
 	abstract update(): void;
 	abstract text(): string;
@@ -25,32 +34,26 @@ abstract class TradeMarkersAxisView implements ISeriesPrimitiveAxisView {
 	}
 
 	textColor() {
-		return this._source.options.labelTextColor;
+		return this._labelOptions.labelTextColor;
 	}
+
 	backColor() {
-		return this._source.options.labelColor;
+		return this._labelOptions.labelColor;
 	}
+
 	movePoint(p: Point) {
 		this._p = p;
 		this.update();
 	}
 }
 
-export class TradeMarkersTimeAxisView extends TradeMarkersAxisView {
-	update() {
-		const timeScale = this._source.chart.timeScale();
-		this._pos = timeScale.timeToCoordinate(this._p.time);
-	}
-	text() {
-		return this._source.options.timeLabelFormatter(this._p.time);
-	}
-}
-
 export class TradeMarkersPriceAxisView extends TradeMarkersAxisView {
+
 	update() {
 		const series = this._source.series;
 		this._pos = series.priceToCoordinate(this._p.price);
 	}
+
 	text() {
 		return this._source.options.priceLabelFormatter(this._p.price);
 	}

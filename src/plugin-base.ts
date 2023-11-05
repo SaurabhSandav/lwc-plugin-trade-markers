@@ -9,6 +9,9 @@ import {
 } from 'lightweight-charts';
 import { ensureDefined } from './helpers/assertions';
 
+//* PluginBase is a useful base to build a plugin upon which
+//* already handles creating getters for the chart and series,
+//* and provides a requestUpdate method.
 export abstract class PluginBase implements ISeriesPrimitive<Time> {
 	private _chart: IChartApi | undefined = undefined;
 	private _series: ISeriesApi<keyof SeriesOptionsMap> | undefined = undefined;
