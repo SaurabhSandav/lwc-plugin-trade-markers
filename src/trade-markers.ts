@@ -114,6 +114,7 @@ export class TradeMarkers
 				new TradeMarkersPriceAxisView(this, { time: trade.entryTime, price: trade.targetPrice }, this._options.targetLabelOptions),
 			];
 		});
+		this.requestUpdate();
 	}
 
 	public get trades(): Trade[] {
